@@ -97,7 +97,7 @@ easy to overlook in a first-pass implementation:
 
 ```bash
 pip install pandas scikit-learn matplotlib seaborn
-python credit_scoring.py
+python credit-risk-prediction.py
 ```
 
 The script will:
