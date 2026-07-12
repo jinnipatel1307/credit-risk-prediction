@@ -16,16 +16,16 @@ if "Unnamed: 0" in df.columns:
 print("Shape:", df.shape)
 print("\nMissing values:\n", df.isnull().sum())
 
-# Features aur Target (missing values/outliers se pehle target alag karo)
+# Features aur Target 
 X = df.drop(['SeriousDlqin2yrs'], axis=1)
 y = df['SeriousDlqin2yrs']
 
-# TRAIN / TEST SPLIT — sabse pehle
+# TRAIN / TEST SPLIT 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
 X_train = X_train.copy()
 X_test = X_test.copy()
 
-# NULL VALUE HANDLING — sirf TRAIN se median/mode seekho
+# NULL VALUE HANDLING
 income_median = X_train["MonthlyIncome"].median()
 dependents_mode = X_train["NumberOfDependents"].mode()[0]
 
@@ -35,7 +35,7 @@ X_test["MonthlyIncome"] = X_test["MonthlyIncome"].fillna(income_median)
 X_train["NumberOfDependents"] = X_train["NumberOfDependents"].fillna(dependents_mode)
 X_test["NumberOfDependents"] = X_test["NumberOfDependents"].fillna(dependents_mode)
 
-# OUTLIER REMOVAL — sirf TRAIN rows hataye jayenge (test set untouched rehta hai)
+# OUTLIER REMOVAL 
 late_cols = ['NumberOfTime30-59DaysPastDueNotWorse','NumberOfTime60-89DaysPastDueNotWorse','NumberOfTimes90DaysLate']
 for col in late_cols:
     if col in X_train.columns:
@@ -45,7 +45,7 @@ for col in late_cols:
 
 print("\nTrain shape after outlier removal:", X_train.shape)
 
-# FEATURE ENGINEERING — same formula, train aur test dono pe alag se apply
+# FEATURE ENGINEERING
 for dataset in [X_train, X_test]:
     dataset['DebtToIncomeRatio'] = dataset['DebtRatio'] * dataset['MonthlyIncome']
     dataset['IncomePerDependent'] = dataset['MonthlyIncome'] / (dataset['NumberOfDependents'] + 1)
@@ -118,13 +118,12 @@ y_prob_best = best_model.predict_proba(X_test)[:, 1]
 # Best threshold 
 prec_vals, rec_vals, thresholds = precision_recall_curve(y_test, y_prob_best)
 
-# Business rule: Recall kam se kam 70% honi chahiye (defaulters miss na ho)
+# Business rule: Recall minimum 70%
 min_recall_required = 0.70
 
 valid_indices = [i for i in range(len(rec_vals)) if rec_vals[i] >= min_recall_required]
 
 if valid_indices:
-    # In sabme se sabse zyada Precision wala threshold chuno
     best_idx = max(valid_indices, key=lambda i: prec_vals[i])
     best_threshold = thresholds[best_idx] if best_idx < len(thresholds) else 0.5
 else:
@@ -135,8 +134,6 @@ print(f"Calculated Best Threshold (Recall >= {min_recall_required}): {best_thres
 
 y_prob_best = best_model.predict_proba(X_test)[:, 1]
 y_pred_final = (y_prob_best >= best_threshold).astype(int)
-
-print("\n--- Threshold Comparison ---")
 
 print(f"\n--- Final Model (Threshold={best_threshold}) ---")
 print(f"  Recall    : {recall_score(y_test, y_pred_final):.3f}")
@@ -181,7 +178,7 @@ plt.savefig('credit_results.png', dpi=150, bbox_inches='tight')
 plt.show()
 print("\nPlot saved: credit_results.png")
 
-# Feature Importance - Separate Figure
+# Feature Importance 
 if hasattr(best_model, 'feature_importances_'):
     fi = pd.Series(best_model.feature_importances_, index=X_train.columns).sort_values(ascending=False)
 else:
@@ -199,9 +196,7 @@ plt.show()
 
 print("Plot saved: feature_importance.png")
 
-# ============================================
 # New Customer Credit Risk Prediction
-# ============================================
 
 def get_customer_input():
     print("\n--- Enter Customer Details for Credit Risk Prediction ---")
@@ -239,7 +234,7 @@ customer_data = None
 while customer_data is None:
     customer_data = get_customer_input()
 
-# Engineered features — training jaisa hi calculate karo
+# Engineered features 
 customer_data["DebtToIncomeRatio"] = customer_data["DebtRatio"] * customer_data["MonthlyIncome"]
 customer_data["IncomePerDependent"] = customer_data["MonthlyIncome"] / (customer_data["NumberOfDependents"] + 1)
 customer_data["TotalLatePayments"] = (
