@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific: Dataset files (download from Kaggle instead of committing)
+cs-training.csv
+cs-test.csv
+
+# Generated output images (regenerated when script runs)
+credit_results.png
+feature_importance.png
