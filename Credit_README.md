@@ -1,4 +1,4 @@
-# Credit Scoring - Give Me Some Credit (Streamlit App)
+# Credit Scoring - Give Me Some Credit
 
 An interactive web application that predicts a customer's credit default risk using the **"Give Me Some Credit"** dataset. The project cleans and engineers features from raw financial data, trains multiple classification models, tunes a decision threshold using a business recall requirement, and provides a Streamlit-based UI for exploring the data, comparing models, and predicting default risk for a new customer in real time.
 
@@ -113,4 +113,4 @@ For the best experience, run `credit_app.py`.
 ## Author & Contact
 
 Jinni patel
-E_mail:jinnipatel1307@gmail.com
+Email:jinnipatel1307@gmail.com
